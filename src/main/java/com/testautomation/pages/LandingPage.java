@@ -54,14 +54,10 @@ public class LandingPage extends BasePage {
         click(LOGIN_BUTTON);
         
         // Wait for the login form to become visible (since it's a single-page app)
-        try {
-            page.waitForSelector("#login-page:not(.hidden)", new Page.WaitForSelectorOptions().setTimeout(10000));
-            logger.info("Login page section is now visible");
-        } catch (Exception e) {
-            logger.warn("Login page visibility timeout, continuing with page load state wait");
-        }
+        waitForElementToBeVisible("#login-page:not(.hidden)");
+        waitForElementToBeVisible("#email");
+        waitForElementToBeVisible("#password");
         
-        waitForLoadState();
         takeScreenshot("after_login_click");
         ExtentReportManager.logInfo("Login button clicked successfully");
         return new LoginPage(page);
@@ -71,7 +67,8 @@ public class LandingPage extends BasePage {
         logger.info("Clicking signup button");
         takeScreenshot("before_signup_click");
         click(SIGNUP_BUTTON);
-        waitForLoadState();
+        // Wait for any signup-related elements to appear
+        waitForJavaScriptExecution();
         takeScreenshot("after_signup_click");
         ExtentReportManager.logInfo("Signup button clicked successfully");
     }
@@ -113,9 +110,10 @@ public class LandingPage extends BasePage {
     public void waitForPageToLoad() {
         logger.info("Waiting for landing page to load completely");
         // Wait for the landing page section to be visible (not hidden)
-        waitForElement("#landing-page:not(.hidden)");
-        waitForElement(PAGE_TITLE);
-        waitForLoadState();
+        waitForElementToBeVisible("#landing-page:not(.hidden)");
+        waitForElementToBeVisible(PAGE_TITLE);
+        waitForElementToBeVisible(LOGIN_BUTTON);
+        waitForElementToBeVisible(SIGNUP_BUTTON);
         takeScreenshot("landing_page_loaded");
         ExtentReportManager.logInfo("Landing page loaded completely");
     }

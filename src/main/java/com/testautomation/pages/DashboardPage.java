@@ -69,14 +69,10 @@ public class DashboardPage extends BasePage {
         click(LOGOUT_BUTTON);
         
         // Wait for the landing page section to become visible (since it's a single-page app)
-        try {
-            page.waitForSelector("#landing-page:not(.hidden)", new Page.WaitForSelectorOptions().setTimeout(10000));
-            logger.info("Landing page section is now visible");
-        } catch (Exception e) {
-            logger.warn("Landing page visibility timeout, continuing with page load state wait");
-        }
+        waitForElementToBeVisible("#landing-page:not(.hidden)");
+        waitForElementToBeVisible("#landing-page h1");
+        waitForElementToBeVisible("#landing-page .login-btn");
         
-        waitForLoadState();
         takeScreenshot("after_logout_click");
         ExtentReportManager.logInfo("Logout button clicked successfully");
         return new LandingPage(page);
@@ -88,11 +84,12 @@ public class DashboardPage extends BasePage {
         
         // First open the user menu dropdown
         click(USER_MENU);
-        waitForElement(PROFILE_BUTTON);
+        waitForElementToBeVisible(PROFILE_BUTTON);
         
         // Then click the profile button
         click(PROFILE_BUTTON);
-        waitForLoadState();
+        // Wait for any profile-related elements to appear
+        waitForJavaScriptExecution();
         takeScreenshot("after_profile_click");
         ExtentReportManager.logInfo("Profile button clicked successfully");
     }
@@ -103,11 +100,12 @@ public class DashboardPage extends BasePage {
         
         // First open the user menu dropdown
         click(USER_MENU);
-        waitForElement(SETTINGS_BUTTON);
+        waitForElementToBeVisible(SETTINGS_BUTTON);
         
         // Then click the settings button
         click(SETTINGS_BUTTON);
-        waitForLoadState();
+        // Wait for any settings-related elements to appear
+        waitForJavaScriptExecution();
         takeScreenshot("after_settings_click");
         ExtentReportManager.logInfo("Settings button clicked successfully");
     }
@@ -146,7 +144,8 @@ public class DashboardPage extends BasePage {
         takeScreenshot("before_search");
         fill(SEARCH_BOX, searchTerm);
         click(SEARCH_BUTTON);
-        waitForLoadState();
+        // Wait for search results to appear
+        waitForJavaScriptExecution();
         takeScreenshot("after_search");
         ExtentReportManager.logInfo("Search performed for: " + searchTerm);
     }
@@ -163,7 +162,8 @@ public class DashboardPage extends BasePage {
         logger.info("Clicking search button");
         takeScreenshot("before_search_button_click");
         click(SEARCH_BUTTON);
-        waitForLoadState();
+        // Wait for search results to appear
+        waitForJavaScriptExecution();
         takeScreenshot("after_search_button_click");
         ExtentReportManager.logInfo("Search button clicked successfully");
     }
@@ -198,9 +198,10 @@ public class DashboardPage extends BasePage {
     public void waitForPageToLoad() {
         logger.info("Waiting for dashboard page to load completely");
         // Wait for the dashboard page section to be visible (not hidden)
-        waitForElement("#dashboard-page:not(.hidden)");
-        waitForElement(DASHBOARD_TITLE);
-        waitForLoadState();
+        waitForElementToBeVisible("#dashboard-page:not(.hidden)");
+        waitForElementToBeVisible(DASHBOARD_TITLE);
+        waitForElementToBeVisible(USER_MENU);
+        waitForElementToBeVisible(SEARCH_BOX);
         takeScreenshot("dashboard_page_loaded");
         ExtentReportManager.logInfo("Dashboard page loaded completely");
     }

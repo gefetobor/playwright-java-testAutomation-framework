@@ -21,7 +21,7 @@ public class BaseTest {
 
         // Create a new playwright and browser instance for each test method (like the working project)
         playwright = Playwright.create();
-        String browserName = ConfigManager.getProperty("browser.name");
+        String browserName = ConfigManager.getProperty("browser.name", "chromium");
         boolean headless = ConfigManager.getBooleanProperty("browser.headless");
         
         try {
@@ -41,13 +41,15 @@ public class BaseTest {
                     .setViewportSize(ConfigManager.getIntProperty("browser.width", 1920), 
                                    ConfigManager.getIntProperty("browser.height", 1080)));*/
 
-            context = browser.newContext(new Browser.NewContextOptions());
-            page = context.newPage();
-            
-            // Set default timeout
-            page.setDefaultTimeout(ConfigManager.getIntProperty("app.timeout", 30000));
-            page.setDefaultNavigationTimeout(ConfigManager.getIntProperty("app.timeout", 30000));
+            context = browser.newContext(new Browser.NewContextOptions()
+            .setLocale("en-US")
+            .setAcceptDownloads(true));
 
+            context.setDefaultNavigationTimeout(ConfigManager.getIntProperty("app.navigation.timeout", 45000)); // ms
+            context.setDefaultTimeout(ConfigManager.getIntProperty("app.timeout", 15000)); // ms for locators/actions
+
+            page = context.newPage();
+    
             logger.info("Browser launched: {} (headless: {})", browserName, headless);
            // logger.info("New page created with viewport: {}x{}", ConfigManager.getIntProperty("browser.width", 1920), ConfigManager.getIntProperty("browser.height", 1080));
         } catch (Exception e) {
@@ -66,21 +68,13 @@ public class BaseTest {
             logger.error("Test failed. Screenshot saved: {}", screenshotPath);
         }
         
-        // Close resources in the same order as the working project
-        if (browser != null) {
-            browser.close();
-            browser = null;
-        }
-        if (playwright != null) {
-            playwright.close();
-            playwright = null;
-        }
-        if (context != null) {
-            context = null;
-        }
-        if (page != null) {
-            page = null;
-        }
+        // Close in safe order: page -> context -> browser -> playwright
+        try { if (page != null) page.close(); } catch (Exception ignored) { logger.debug("Error closing page", ignored); }
+        try { if (context != null) context.close(); } catch (Exception ignored) { logger.debug("Error closing context", ignored); }
+        try { if (browser != null) browser.close(); } catch (Exception ignored) { logger.debug("Error closing browser", ignored); }
+        try { if (playwright != null) playwright.close(); } catch (Exception ignored) { logger.debug("Error closing playwright", ignored); }
+
+        page = null; context = null; browser = null; playwright = null;
         logger.info("Test method teardown completed");
     }
 

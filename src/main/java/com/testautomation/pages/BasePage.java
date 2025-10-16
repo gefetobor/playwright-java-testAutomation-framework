@@ -1,6 +1,8 @@
 package com.testautomation.pages;
 
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.WaitForSelectorState;
+import com.microsoft.playwright.options.LoadState;
 import com.testautomation.utils.ScreenshotUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,6 +63,63 @@ public abstract class BasePage {
     protected void waitForLoadState() {
         logger.info("Waiting for page load state");
         page.waitForLoadState();
+    }
+
+    // Specific wait methods for better reliability
+    protected void waitForElementToBeVisible(String selector) {
+        logger.info("Waiting for element to be visible: {}", selector);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.VISIBLE));
+    }
+
+    protected void waitForElementToBeHidden(String selector) {
+        logger.info("Waiting for element to be hidden: {}", selector);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.HIDDEN));
+    }
+
+    protected void waitForElementToBeAttached(String selector) {
+        logger.info("Waiting for element to be attached: {}", selector);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.ATTACHED));
+    }
+
+    protected void waitForElementToBeDetached(String selector) {
+        logger.info("Waiting for element to be detached: {}", selector);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setState(WaitForSelectorState.DETACHED));
+    }
+
+    protected void waitForElementWithTimeout(String selector, int timeoutMs) {
+        logger.info("Waiting for element: {} with timeout: {}ms", selector, timeoutMs);
+        page.waitForSelector(selector, new Page.WaitForSelectorOptions().setTimeout(timeoutMs));
+    }
+
+    protected void waitForElementToContainText(String selector, String text) {
+        logger.info("Waiting for element {} to contain text: {}", selector, text);
+        // Wait for element to be visible first, then check text content
+        waitForElementToBeVisible(selector);
+        // Additional wait for text content to be loaded
+        waitForJavaScriptExecution();
+    }
+
+    protected void waitForElementToHaveAttribute(String selector, String attribute, String value) {
+        logger.info("Waiting for element {} to have attribute {}={}", selector, attribute, value);
+        // Wait for element to be visible first, then check attribute
+        waitForElementToBeVisible(selector);
+        // Additional wait for attributes to be set
+        waitForJavaScriptExecution();
+    }
+
+    protected void waitForUrlToContain(String urlPart) {
+        logger.info("Waiting for URL to contain: {}", urlPart);
+        page.waitForURL("**/*" + urlPart + "*");
+    }
+
+    protected void waitForNavigation() {
+        logger.info("Waiting for navigation to complete");
+        page.waitForLoadState(LoadState.NETWORKIDLE);
+    }
+
+    protected void waitForJavaScriptExecution() {
+        logger.info("Waiting for JavaScript execution to complete");
+        page.waitForLoadState(LoadState.DOMCONTENTLOADED);
     }
 
     protected void navigateTo(String url) {

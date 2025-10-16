@@ -59,14 +59,10 @@ public class LoginPage extends BasePage {
         click(LOGIN_BUTTON);
         
         // Wait for the dashboard section to become visible (since it's a single-page app)
-        try {
-            page.waitForSelector("#dashboard-page:not(.hidden)", new Page.WaitForSelectorOptions().setTimeout(10000));
-            logger.info("Dashboard page section is now visible");
-        } catch (Exception e) {
-            logger.warn("Dashboard page visibility timeout, continuing with page load state wait");
-        }
+        waitForElementToBeVisible("#dashboard-page:not(.hidden)");
+        waitForElementToBeVisible("#dashboard-page h1");
+        waitForElementToBeVisible("#dashboard-page .user-menu button");
         
-        waitForLoadState();
         takeScreenshot("after_login_submit");
         ExtentReportManager.logInfo("Login button clicked successfully");
         return new DashboardPage(page);
@@ -76,6 +72,8 @@ public class LoginPage extends BasePage {
         logger.info("Clicking login button expecting error");
         takeScreenshot("before_login_submit_error");
         click(LOGIN_BUTTON);
+        // Wait for either error message or form validation
+        waitForJavaScriptExecution();
         takeScreenshot("after_login_submit_error");
         ExtentReportManager.logInfo("Login button clicked (expecting error)");
     }
@@ -148,7 +146,8 @@ public class LoginPage extends BasePage {
         logger.info("Clicking forgot password link");
         takeScreenshot("before_forgot_password");
         click(FORGOT_PASSWORD_LINK);
-        waitForLoadState();
+        // Wait for any forgot password modal or page to appear
+        waitForJavaScriptExecution();
         takeScreenshot("after_forgot_password");
         ExtentReportManager.logInfo("Forgot password link clicked");
     }
@@ -159,14 +158,10 @@ public class LoginPage extends BasePage {
         click(BACK_TO_HOME_LINK);
         
         // Wait for the landing page section to become visible (since it's a single-page app)
-        try {
-            page.waitForSelector("#landing-page:not(.hidden)", new Page.WaitForSelectorOptions().setTimeout(10000));
-            logger.info("Landing page section is now visible");
-        } catch (Exception e) {
-            logger.warn("Landing page visibility timeout, continuing with page load state wait");
-        }
+        waitForElementToBeVisible("#landing-page:not(.hidden)");
+        waitForElementToBeVisible("#landing-page h1");
+        waitForElementToBeVisible("#landing-page .login-btn");
         
-        waitForLoadState();
         takeScreenshot("after_back_to_home");
         ExtentReportManager.logInfo("Back to home link clicked");
         return new LandingPage(page);
@@ -191,11 +186,11 @@ public class LoginPage extends BasePage {
     public void waitForPageToLoad() {
         logger.info("Waiting for login page to load completely");
         // Wait for the login page section to be visible (not hidden)
-        waitForElement("#login-page:not(.hidden)");
-        waitForElement(EMAIL_FIELD);
-        waitForElement(PASSWORD_FIELD);
-        waitForElement(LOGIN_BUTTON);
-        waitForLoadState();
+        waitForElementToBeVisible("#login-page:not(.hidden)");
+        waitForElementToBeVisible(EMAIL_FIELD);
+        waitForElementToBeVisible(PASSWORD_FIELD);
+        waitForElementToBeVisible(LOGIN_BUTTON);
+        waitForElementToBeVisible(REMEMBER_ME_CHECKBOX);
         takeScreenshot("login_page_loaded");
         ExtentReportManager.logInfo("Login page loaded completely");
     }

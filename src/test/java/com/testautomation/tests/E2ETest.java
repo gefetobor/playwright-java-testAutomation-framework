@@ -1,6 +1,5 @@
 package com.testautomation.tests;
 
-import com.microsoft.playwright.Page;
 import com.testautomation.base.BaseTest;
 import com.testautomation.config.ConfigManager;
 import com.testautomation.pages.DashboardPage;
@@ -46,16 +45,12 @@ public class E2ETest extends BaseTest {
             
             // Step 2: Navigate to login page
             LoginPage loginPage = landingPage.clickLoginButton();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             loginPage.waitForPageToLoad();
             Assert.assertTrue(loginPage.isPageLoaded(), "Login page should load");
             ExtentReportManager.logPass("Step 2: Navigated to login page successfully");
             
             // Step 3: Perform login
             DashboardPage dashboardPage = loginPage.login(validEmail, validPassword);
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             dashboardPage.waitForPageToLoad();
             Assert.assertTrue(dashboardPage.isPageLoaded(), "Dashboard page should load after login");
             ExtentReportManager.logPass("Step 3: Login successful, dashboard page loaded");
@@ -66,8 +61,6 @@ public class E2ETest extends BaseTest {
             
             // Step 5: Perform logout
             LandingPage returnToLanding = dashboardPage.performLogout();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             returnToLanding.waitForPageToLoad();
             Assert.assertTrue(returnToLanding.isPageLoaded(), "Should return to landing page after logout");
             ExtentReportManager.logPass("Step 5: Logout successful, returned to landing page");
@@ -89,8 +82,6 @@ public class E2ETest extends BaseTest {
             LandingPage landingPage = new LandingPage(page);
             landingPage.waitForPageToLoad();
             LoginPage loginPage = landingPage.clickLoginButton();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             loginPage.waitForPageToLoad();
             ExtentReportManager.logPass("Step 1: Navigated to login page");
             
@@ -132,30 +123,22 @@ public class E2ETest extends BaseTest {
             
             // Step 2: Navigate to login
             LoginPage loginPage = landingPage.clickLoginButton();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             loginPage.waitForPageToLoad();
             ExtentReportManager.logPass("Step 2: Navigated to login page");
             
             // Step 3: Navigate back to landing
             LandingPage backToLanding = loginPage.clickBackToHome();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             backToLanding.waitForPageToLoad();
             Assert.assertTrue(backToLanding.isPageLoaded(), "Should return to landing page");
             ExtentReportManager.logPass("Step 3: Navigated back to landing page");
             
             // Step 4: Navigate to login again
             LoginPage loginPage2 = backToLanding.clickLoginButton();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             loginPage2.waitForPageToLoad();
             ExtentReportManager.logPass("Step 4: Navigated to login page again");
             
             // Step 5: Perform valid login
             DashboardPage dashboardPage = loginPage2.login(validEmail, validPassword);
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             dashboardPage.waitForPageToLoad();
             Assert.assertTrue(dashboardPage.isPageLoaded(), "Dashboard should load after login");
             ExtentReportManager.logPass("Step 5: Successfully logged in to dashboard");
@@ -177,12 +160,8 @@ public class E2ETest extends BaseTest {
             LandingPage landingPage = new LandingPage(page);
             landingPage.waitForPageToLoad();
             LoginPage loginPage = landingPage.clickLoginButton();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             loginPage.waitForPageToLoad();
             DashboardPage dashboardPage = loginPage.login(validEmail, validPassword);
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             dashboardPage.waitForPageToLoad();
             ExtentReportManager.logPass("Step 1: Successfully logged in to dashboard");
             
@@ -205,8 +184,6 @@ public class E2ETest extends BaseTest {
             
             // Step 6: Test logout
             LandingPage logoutLanding = dashboardPage.performLogout();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             logoutLanding.waitForPageToLoad();
             Assert.assertTrue(logoutLanding.isPageLoaded(), "Should return to landing page after logout");
             ExtentReportManager.logPass("Step 6: Logout successful");
@@ -228,8 +205,6 @@ public class E2ETest extends BaseTest {
             LandingPage landingPage = new LandingPage(page);
             landingPage.waitForPageToLoad();
             LoginPage loginPage = landingPage.clickLoginButton();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             loginPage.waitForPageToLoad();
             ExtentReportManager.logPass("Step 1: Navigated to login page");
             
@@ -251,16 +226,12 @@ public class E2ETest extends BaseTest {
             loginPage.clearEmailField();
             loginPage.clearPasswordField();
             DashboardPage dashboardPage = loginPage.login(validEmail, validPassword);
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             dashboardPage.waitForPageToLoad();
             Assert.assertTrue(dashboardPage.isPageLoaded(), "Valid login should work after invalid attempts");
             ExtentReportManager.logPass("Step 4: Valid login successful after multiple attempts");
             
             // Step 5: Logout
             LandingPage logoutLanding = dashboardPage.performLogout();
-            // Wait for the page to fully load and be ready
-            page.waitForLoadState();
             logoutLanding.waitForPageToLoad();
             ExtentReportManager.logPass("Step 5: Logout successful");
             
