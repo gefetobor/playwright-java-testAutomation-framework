@@ -1,0 +1,40 @@
+{
+  "testUsers": [
+    {
+      "email": "test@example.com",
+      "password": "password123",
+      "firstName": "Test",
+      "lastName": "User"
+    },
+    {
+      "email": "admin@example.com",
+      "password": "admin123",
+      "firstName": "Admin",
+      "lastName": "User"
+    }
+  ],
+  "invalidUsers": [
+    {
+      "email": "invalid@example.com",
+      "password": "wrongpassword",
+      "expectedError": "Invalid credentials"
+    },
+    {
+      "email": "test@invalid.com",
+      "password": "password123",
+      "expectedError": "User not found"
+    }
+  ],
+  "testData": {
+    "searchTerms": [
+      "test search",
+      "automation",
+      "playwright"
+    ],
+    "urls": {
+      "landing": "https://example.com",
+      "login": "https://example.com/login",
+      "dashboard": "https://example.com/dashboard"
+    }
+  }
+}
