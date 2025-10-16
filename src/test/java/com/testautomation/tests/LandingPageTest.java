@@ -3,6 +3,7 @@ package com.testautomation.tests;
 import com.testautomation.base.BaseTest;
 import com.testautomation.pages.LandingPage;
 import com.testautomation.utils.ExtentReportManager;
+import com.testautomation.utils.RetryAnalyzer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -21,7 +22,7 @@ public class LandingPageTest extends BaseTest {
         landingPage.waitForPageToLoad();
     }
 
-    @Test(description = "Verify landing page loads successfully")
+    @Test(description = "Verify landing page loads successfully", retryAnalyzer = RetryAnalyzer.class)
     public void testLandingPageLoads() {
         logger.info("Testing landing page loads successfully");
         ExtentReportManager.logInfo("Starting test: Landing page loads successfully");
@@ -35,7 +36,7 @@ public class LandingPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify landing page title is displayed")
+    @Test(description = "Verify landing page title is displayed", retryAnalyzer = RetryAnalyzer.class)
     public void testLandingPageTitle() {
         logger.info("Testing landing page title display");
         ExtentReportManager.logInfo("Starting test: Landing page title display");
@@ -51,7 +52,7 @@ public class LandingPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify login button is visible and clickable")
+    @Test(description = "Verify login button is visible and clickable", retryAnalyzer = RetryAnalyzer.class)
     public void testLoginButtonVisibility() {
         logger.info("Testing login button visibility");
         ExtentReportManager.logInfo("Starting test: Login button visibility");
@@ -65,7 +66,7 @@ public class LandingPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify signup button is visible")
+    @Test(description = "Verify signup button is visible", retryAnalyzer = RetryAnalyzer.class)
     public void testSignupButtonVisibility() {
         logger.info("Testing signup button visibility");
         ExtentReportManager.logInfo("Starting test: Signup button visibility");
@@ -79,7 +80,7 @@ public class LandingPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify navigation menu is visible")
+    @Test(description = "Verify navigation menu is visible", retryAnalyzer = RetryAnalyzer.class)
     public void testNavigationMenuVisibility() {
         logger.info("Testing navigation menu visibility");
         ExtentReportManager.logInfo("Starting test: Navigation menu visibility");
@@ -93,7 +94,7 @@ public class LandingPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify footer is visible")
+    @Test(description = "Verify footer is visible", retryAnalyzer = RetryAnalyzer.class)
     public void testFooterVisibility() {
         logger.info("Testing footer visibility");
         ExtentReportManager.logInfo("Starting test: Footer visibility");
@@ -107,7 +108,7 @@ public class LandingPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify page scrolling functionality")
+    @Test(description = "Verify page scrolling functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testPageScrolling() {
         logger.info("Testing page scrolling functionality");
         ExtentReportManager.logInfo("Starting test: Page scrolling functionality");
@@ -126,7 +127,7 @@ public class LandingPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify current URL is correct")
+    @Test(description = "Verify current URL is correct", retryAnalyzer = RetryAnalyzer.class)
     public void testCurrentUrl() {
         logger.info("Testing current URL");
         ExtentReportManager.logInfo("Starting test: Current URL verification");

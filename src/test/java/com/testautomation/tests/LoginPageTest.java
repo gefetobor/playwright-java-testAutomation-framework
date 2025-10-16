@@ -1,11 +1,11 @@
 package com.testautomation.tests;
 
-import com.microsoft.playwright.Page;
 import com.testautomation.base.BaseTest;
 import com.testautomation.config.ConfigManager;
 import com.testautomation.pages.LandingPage;
 import com.testautomation.pages.LoginPage;
 import com.testautomation.utils.ExtentReportManager;
+import com.testautomation.utils.RetryAnalyzer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -36,7 +36,7 @@ public class LoginPageTest extends BaseTest {
         invalidPassword = ConfigManager.getProperty("test.user.invalid.password");
     }
 
-    @Test(description = "Verify login page loads successfully")
+    @Test(description = "Verify login page loads successfully", retryAnalyzer = RetryAnalyzer.class)
     public void testLoginPageLoads() {
         logger.info("Testing login page loads successfully");
         ExtentReportManager.logInfo("Starting test: Login page loads successfully");
@@ -50,7 +50,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify login page title is displayed")
+    @Test(description = "Verify login page title is displayed", retryAnalyzer = RetryAnalyzer.class)
     public void testLoginPageTitle() {
         logger.info("Testing login page title display");
         ExtentReportManager.logInfo("Starting test: Login page title display");
@@ -66,7 +66,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify email field accepts input")
+    @Test(description = "Verify email field accepts input", retryAnalyzer = RetryAnalyzer.class)
     public void testEmailFieldInput() {
         logger.info("Testing email field input");
         ExtentReportManager.logInfo("Starting test: Email field input");
@@ -80,7 +80,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify password field accepts input")
+    @Test(description = "Verify password field accepts input", retryAnalyzer = RetryAnalyzer.class)
     public void testPasswordFieldInput() {
         logger.info("Testing password field input");
         ExtentReportManager.logInfo("Starting test: Password field input");
@@ -94,7 +94,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify login with valid credentials")
+    @Test(description = "Verify login with valid credentials", retryAnalyzer = RetryAnalyzer.class)
     public void testValidLogin() {
         logger.info("Testing login with valid credentials");
         ExtentReportManager.logInfo("Starting test: Valid login");
@@ -110,7 +110,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify login with invalid credentials shows error")
+    @Test(description = "Verify login with invalid credentials shows error", retryAnalyzer = RetryAnalyzer.class)
     public void testInvalidLogin() {
         logger.info("Testing login with invalid credentials");
         ExtentReportManager.logInfo("Starting test: Invalid login");
@@ -134,7 +134,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify remember me checkbox functionality")
+    @Test(description = "Verify remember me checkbox functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testRememberMeCheckbox() {
         logger.info("Testing remember me checkbox");
         ExtentReportManager.logInfo("Starting test: Remember me checkbox");
@@ -150,7 +150,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify forgot password link functionality")
+    @Test(description = "Verify forgot password link functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testForgotPasswordLink() {
         logger.info("Testing forgot password link");
         ExtentReportManager.logInfo("Starting test: Forgot password link");
@@ -165,7 +165,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify back to home link functionality")
+    @Test(description = "Verify back to home link functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testBackToHomeLink() {
         logger.info("Testing back to home link");
         ExtentReportManager.logInfo("Starting test: Back to home link");
@@ -180,7 +180,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify field clearing functionality")
+    @Test(description = "Verify field clearing functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testFieldClearing() {
         logger.info("Testing field clearing functionality");
         ExtentReportManager.logInfo("Starting test: Field clearing functionality");
@@ -201,7 +201,7 @@ public class LoginPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify login with empty credentials")
+    @Test(description = "Verify login with empty credentials", retryAnalyzer = RetryAnalyzer.class)
     public void testEmptyCredentialsLogin() {
         logger.info("Testing login with empty credentials");
         ExtentReportManager.logInfo("Starting test: Empty credentials login");

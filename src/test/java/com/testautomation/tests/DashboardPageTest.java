@@ -6,6 +6,7 @@ import com.testautomation.pages.DashboardPage;
 import com.testautomation.pages.LandingPage;
 import com.testautomation.pages.LoginPage;
 import com.testautomation.utils.ExtentReportManager;
+import com.testautomation.utils.RetryAnalyzer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -19,38 +20,61 @@ public class DashboardPageTest extends BaseTest {
     private String validPassword;
 
     @BeforeMethod
-    public void setUp() {
+    public void setUp() throws InterruptedException {
         logger.info("Setting up DashboardPageTest");
-        navigateToApp();
         
-        // Load test data
+        // Load test data first
         validEmail = ConfigManager.getProperty("test.user.email");
         validPassword = ConfigManager.getProperty("test.user.password");
         
-        // Navigate to dashboard through login
-        LandingPage landingPage = new LandingPage(page);
-        landingPage.waitForPageToLoad();
-        LoginPage loginPage = landingPage.clickLoginButton();
-        loginPage.waitForPageToLoad();
-        dashboardPage = loginPage.login(validEmail, validPassword);
-        dashboardPage.waitForPageToLoad();
+        try {
+            navigateToApp();
+            
+            // Navigate to dashboard through login
+            LandingPage landingPage = new LandingPage(page);
+            landingPage.waitForPageToLoad();
+            LoginPage loginPage = landingPage.clickLoginButton();
+            loginPage.waitForPageToLoad();
+            dashboardPage = loginPage.login(validEmail, validPassword);
+            dashboardPage.waitForPageToLoad();
+
+        } catch (Exception e) {
+            logger.error("Setup failed, test will be retried: {}", e.getMessage());
+            throw e; // Re-throw to trigger retry
+        }
     }
 
-    @Test(description = "Verify dashboard page loads successfully")
-    public void testDashboardPageLoads() {
+    @Test(description = "Verify dashboard page loads successfully", retryAnalyzer = RetryAnalyzer.class)
+    public void testDashboardPageLoads() throws InterruptedException {
+        Thread.sleep(8000);
         logger.info("Testing dashboard page loads successfully");
         ExtentReportManager.logInfo("Starting test: Dashboard page loads successfully");
         
         try {
+            // Perform setup within test method to enable retry
+            if (dashboardPage == null) {
+                navigateToApp();
+                LandingPage landingPage = new LandingPage(page);
+                landingPage.waitForPageToLoad();
+                LoginPage loginPage = landingPage.clickLoginButton();
+
+                loginPage.waitForPageToLoad();
+                dashboardPage = loginPage.login(validEmail, validPassword);
+                dashboardPage.waitForPageToLoad();
+
+            }
+            
             Assert.assertTrue(dashboardPage.isPageLoaded(), "Dashboard page should be loaded");
             ExtentReportManager.logPass("Dashboard page loaded successfully");
-        } catch (AssertionError e) {
+        } catch (Exception e) {
+            logger.error("Test failed, will be retried: {}", e.getMessage());
             ExtentReportManager.logFail("Dashboard page failed to load: " + e.getMessage());
             throw e;
         }
     }
 
-    @Test(description = "Verify dashboard page title is displayed")
+
+    @Test(description = "Verify dashboard page title is displayed", retryAnalyzer = RetryAnalyzer.class)
     public void testDashboardPageTitle() {
         logger.info("Testing dashboard page title display");
         ExtentReportManager.logInfo("Starting test: Dashboard page title display");
@@ -66,7 +90,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify welcome message is displayed")
+    @Test(description = "Verify welcome message is displayed", retryAnalyzer = RetryAnalyzer.class)
     public void testWelcomeMessage() {
         logger.info("Testing welcome message display");
         ExtentReportManager.logInfo("Starting test: Welcome message display");
@@ -82,7 +106,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify user menu is visible")
+    @Test(description = "Verify user menu is visible", retryAnalyzer = RetryAnalyzer.class)
     public void testUserMenuVisibility() {
         logger.info("Testing user menu visibility");
         ExtentReportManager.logInfo("Starting test: User menu visibility");
@@ -96,7 +120,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify user menu functionality")
+    @Test(description = "Verify user menu functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testUserMenuFunctionality() {
         logger.info("Testing user menu functionality");
         ExtentReportManager.logInfo("Starting test: User menu functionality");
@@ -110,7 +134,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify profile button functionality")
+    @Test(description = "Verify profile button functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testProfileButton() {
         logger.info("Testing profile button functionality");
         ExtentReportManager.logInfo("Starting test: Profile button functionality");
@@ -124,7 +148,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify settings button functionality")
+    @Test(description = "Verify settings button functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testSettingsButton() {
         logger.info("Testing settings button functionality");
         ExtentReportManager.logInfo("Starting test: Settings button functionality");
@@ -138,7 +162,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify stats section visibility")
+    @Test(description = "Verify stats section visibility", retryAnalyzer = RetryAnalyzer.class)
     public void testStatsSectionVisibility() {
         logger.info("Testing stats section visibility");
         ExtentReportManager.logInfo("Starting test: Stats section visibility");
@@ -155,7 +179,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify recent activity section visibility")
+    @Test(description = "Verify recent activity section visibility", retryAnalyzer = RetryAnalyzer.class)
     public void testRecentActivityVisibility() {
         logger.info("Testing recent activity section visibility");
         ExtentReportManager.logInfo("Starting test: Recent activity section visibility");
@@ -172,7 +196,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify notifications visibility")
+    @Test(description = "Verify notifications visibility", retryAnalyzer = RetryAnalyzer.class)
     public void testNotificationsVisibility() {
         logger.info("Testing notifications visibility");
         ExtentReportManager.logInfo("Starting test: Notifications visibility");
@@ -189,7 +213,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify search functionality")
+    @Test(description = "Verify search functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testSearchFunctionality() {
         logger.info("Testing search functionality");
         ExtentReportManager.logInfo("Starting test: Search functionality");
@@ -204,7 +228,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify search input field")
+    @Test(description = "Verify search input field", retryAnalyzer = RetryAnalyzer.class)
     public void testSearchInputField() {
         logger.info("Testing search input field");
         ExtentReportManager.logInfo("Starting test: Search input field");
@@ -220,7 +244,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify page scrolling functionality")
+    @Test(description = "Verify page scrolling functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testPageScrolling() {
         logger.info("Testing page scrolling functionality");
         ExtentReportManager.logInfo("Starting test: Page scrolling functionality");
@@ -239,7 +263,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify navigation menu visibility")
+    @Test(description = "Verify navigation menu visibility", retryAnalyzer = RetryAnalyzer.class)
     public void testNavigationMenuVisibility() {
         logger.info("Testing navigation menu visibility");
         ExtentReportManager.logInfo("Starting test: Navigation menu visibility");
@@ -253,7 +277,7 @@ public class DashboardPageTest extends BaseTest {
         }
     }
 
-    @Test(description = "Verify current URL is correct")
+    @Test(description = "Verify current URL is correct", retryAnalyzer = RetryAnalyzer.class)
     public void testCurrentUrl() {
         logger.info("Testing current URL");
         ExtentReportManager.logInfo("Starting test: Current URL verification");

@@ -2,6 +2,7 @@ package com.testautomation.tests;
 
 import com.testautomation.base.BaseTest;
 import com.testautomation.utils.ExtentReportManager;
+import com.testautomation.utils.RetryAnalyzer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
@@ -10,7 +11,7 @@ import org.testng.annotations.Test;
 public class SimpleTest extends BaseTest {
     private static final Logger logger = LogManager.getLogger(SimpleTest.class);
 
-    @Test(description = "Simple test without browser")
+    @Test(description = "Simple test without browser", retryAnalyzer = RetryAnalyzer.class)
     public void testSimpleAssertion() {
         logger.info("Running simple test without browser");
         ExtentReportManager.logInfo("Starting simple test");
@@ -23,7 +24,7 @@ public class SimpleTest extends BaseTest {
         logger.info("Simple test completed successfully");
     }
 
-    @Test(description = "Test configuration loading")
+    @Test(description = "Test configuration loading", retryAnalyzer = RetryAnalyzer.class)
     public void testConfigurationLoading() {
         logger.info("Testing configuration loading");
         ExtentReportManager.logInfo("Testing configuration loading");

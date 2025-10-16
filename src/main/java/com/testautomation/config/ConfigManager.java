@@ -64,4 +64,17 @@ public class ConfigManager {
             return defaultValue;
         }
     }
+
+    // Retry configuration methods
+    public static int getRetryMaxAttempts() {
+        return getIntProperty("retry.max.attempts", 3);
+    }
+
+    public static long getRetryDelayMs() {
+        return getIntProperty("retry.delay.ms", 1000);
+    }
+
+    public static int getRetryTimeoutMs() {
+        return getIntProperty("retry.timeout.ms", 5000);
+    }
 }

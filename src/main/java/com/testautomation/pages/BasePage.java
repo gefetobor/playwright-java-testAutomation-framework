@@ -162,10 +162,6 @@ public abstract class BasePage {
         page.locator(selector).dblclick();
     }
 
-    // protected void rightClick(String selector) {
-    //     logger.info("Right clicking element: {}", selector);
-    //     page.locator(selector).click(new Locator.ClickOptions().setButton(MouseButton.RIGHT));
-    // }
 
     protected void selectOption(String selector, String value) {
         logger.info("Selecting option: {} from: {}", value, selector);

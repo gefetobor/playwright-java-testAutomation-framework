@@ -7,7 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
-
 public class BaseTest {
     protected static final Logger logger = LogManager.getLogger(BaseTest.class);
     protected Playwright playwright;
@@ -22,7 +21,7 @@ public class BaseTest {
         // Create a new playwright and browser instance for each test method (like the working project)
         playwright = Playwright.create();
         String browserName = ConfigManager.getProperty("browser.name", "chromium");
-        boolean headless = ConfigManager.getBooleanProperty("browser.headless");
+        boolean headless = ConfigManager.getBooleanProperty("browser.headless", false);
         
         try {
             switch (browserName.toLowerCase()) {
@@ -37,9 +36,6 @@ public class BaseTest {
                     browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
             }
             
-           /* context = browser.newContext(new Browser.NewContextOptions()
-                    .setViewportSize(ConfigManager.getIntProperty("browser.width", 1920), 
-                                   ConfigManager.getIntProperty("browser.height", 1080)));*/
 
             context = browser.newContext(new Browser.NewContextOptions()
             .setLocale("en-US")
@@ -51,7 +47,6 @@ public class BaseTest {
             page = context.newPage();
     
             logger.info("Browser launched: {} (headless: {})", browserName, headless);
-           // logger.info("New page created with viewport: {}x{}", ConfigManager.getIntProperty("browser.width", 1920), ConfigManager.getIntProperty("browser.height", 1080));
         } catch (Exception e) {
             logger.error("Failed to create browser: {}", e.getMessage());
             throw new RuntimeException("Failed to create browser", e);
