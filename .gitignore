@@ -25,6 +25,7 @@ replay_pid*
 
 # Maven
 target/
+!target/.gitkeep
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
@@ -34,6 +35,20 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+
+# Maven build artifacts
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+
+# Maven local repository
+.m2/repository/
 
 # IDE
 .idea/
@@ -53,13 +68,37 @@ buildNumber.properties
 ehthumbs.db
 Thumbs.db
 
-# Test Reports
+# Test Reports and Output
 test-output/
 screenshots/
 logs/
 ExtentReport.html
+*.html
+test-results/
+allure-results/
+allure-report/
 
 # Playwright
 test-results/
 playwright-report/
 playwright/.cache/
+downloads/
+
+# Environment and Configuration
+.env
+.env.local
+.env.*.local
+application-*.properties
+application-*.yml
+application-*.yaml
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
