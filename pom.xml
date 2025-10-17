@@ -71,12 +71,27 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.13.0</version>
+            <version>3.18.0</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Maven clean Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <filesets>
+                        <!-- Clean the TestNG reports folder as well -->
+                        <fileset>
+                            <directory>test-output</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
             <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

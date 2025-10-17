@@ -39,7 +39,7 @@ public class E2ETest extends BaseTest {
         
         try {
             // Step 1: Verify landing page loads
-            LandingPage landingPage = new LandingPage(page);
+            LandingPage landingPage = new LandingPage();
             landingPage.waitForPageToLoad();
             Assert.assertTrue(landingPage.isPageLoaded(), "Landing page should load");
             ExtentReportManager.logPass("Step 1: Landing page loaded successfully");
@@ -80,7 +80,7 @@ public class E2ETest extends BaseTest {
         
         try {
             // Step 1: Navigate to login page
-            LandingPage landingPage = new LandingPage(page);
+            LandingPage landingPage = new LandingPage();
             landingPage.waitForPageToLoad();
             LoginPage loginPage = landingPage.clickLoginButton();
             loginPage.waitForPageToLoad();
@@ -118,7 +118,7 @@ public class E2ETest extends BaseTest {
         
         try {
             // Step 1: Start at landing page
-            LandingPage landingPage = new LandingPage(page);
+            LandingPage landingPage = new LandingPage();
             landingPage.waitForPageToLoad();
             ExtentReportManager.logPass("Step 1: Started at landing page");
             
@@ -158,7 +158,7 @@ public class E2ETest extends BaseTest {
         
         try {
             // Step 1: Login to dashboard
-            LandingPage landingPage = new LandingPage(page);
+            LandingPage landingPage = new LandingPage();
             landingPage.waitForPageToLoad();
             LoginPage loginPage = landingPage.clickLoginButton();
             loginPage.waitForPageToLoad();
@@ -203,7 +203,7 @@ public class E2ETest extends BaseTest {
         
         try {
             // Step 1: Navigate to login page
-            LandingPage landingPage = new LandingPage(page);
+            LandingPage landingPage = new LandingPage();
             landingPage.waitForPageToLoad();
             LoginPage loginPage = landingPage.clickLoginButton();
             loginPage.waitForPageToLoad();

@@ -16,8 +16,8 @@ public class LandingPage extends BasePage {
     private static final String HERO_SECTION = ".hero, .landing-hero, .banner";
     private static final String FOOTER = "footer, .footer";
 
-    public LandingPage(Page page) {
-        super(page);
+    public LandingPage() {
+        // No constructor needed - using PlaywrightManager
     }
 
     public boolean isPageLoaded() {
@@ -60,7 +60,7 @@ public class LandingPage extends BasePage {
         
         takeScreenshot("after_login_click");
         ExtentReportManager.logInfo("Login button clicked successfully");
-        return new LoginPage(page);
+        return new LoginPage();
     }
 
     public void clickSignupButton() {

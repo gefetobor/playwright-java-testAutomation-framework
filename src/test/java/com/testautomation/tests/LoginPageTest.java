@@ -24,7 +24,7 @@ public class LoginPageTest extends BaseTest {
     public void setUp() {
         logger.info("Setting up LoginPageTest");
         navigateToApp();
-        LandingPage landingPage = new LandingPage(page);
+        LandingPage landingPage = new LandingPage();
         landingPage.waitForPageToLoad();
         loginPage = landingPage.clickLoginButton();
         loginPage.waitForPageToLoad();

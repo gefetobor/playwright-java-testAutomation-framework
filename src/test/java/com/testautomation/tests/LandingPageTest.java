@@ -18,7 +18,7 @@ public class LandingPageTest extends BaseTest {
     public void setUp() {
         logger.info("Setting up LandingPageTest");
         navigateToApp();
-        landingPage = new LandingPage(page);
+        landingPage = new LandingPage();
         landingPage.waitForPageToLoad();
     }
 

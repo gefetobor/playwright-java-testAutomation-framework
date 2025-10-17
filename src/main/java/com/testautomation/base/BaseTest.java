@@ -1,86 +1,52 @@
 package com.testautomation.base;
 
-import com.microsoft.playwright.*;
-import com.testautomation.config.ConfigManager;
+import com.testautomation.utils.ExtentReportManager;
 import com.testautomation.utils.ScreenshotUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+
+import java.lang.reflect.Method;
+
 public class BaseTest {
     protected static final Logger logger = LogManager.getLogger(BaseTest.class);
-    protected Playwright playwright;
-    protected Browser browser;
-    protected BrowserContext context;
-    protected Page page;
 
     @BeforeMethod
-    public void setUpMethod() {
-        logger.info("Setting up test method");
-
-        // Create a new playwright and browser instance for each test method (like the working project)
-        playwright = Playwright.create();
-        String browserName = ConfigManager.getProperty("browser.name", "chromium");
-        boolean headless = ConfigManager.getBooleanProperty("browser.headless", false);
+    public void setUp(Method method) {
+        logger.info("Setting up test method: {} in thread: {}", method.getName(), Thread.currentThread().getName());
         
-        try {
-            switch (browserName.toLowerCase()) {
-                case "firefox":
-                    browser = playwright.firefox().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-                    break;
-                case "webkit":
-                    browser = playwright.webkit().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-                    break;
-                case "chromium":
-                default:
-                    browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(headless));
-            }
-            
-
-            context = browser.newContext(new Browser.NewContextOptions()
-            .setLocale("en-US")
-            .setAcceptDownloads(true));
-
-            context.setDefaultNavigationTimeout(ConfigManager.getIntProperty("app.navigation.timeout", 45000)); // ms
-            context.setDefaultTimeout(ConfigManager.getIntProperty("app.timeout", 15000)); // ms for locators/actions
-
-            page = context.newPage();
-    
-            logger.info("Browser launched: {} (headless: {})", browserName, headless);
-        } catch (Exception e) {
-            logger.error("Failed to create browser: {}", e.getMessage());
-            throw new RuntimeException("Failed to create browser", e);
-        }
+        PlaywrightManager.setUp();
+        ExtentReportManager.createTest(method.getName());
+        ExtentReportManager.getTest().info("Starting test: " + method.getName());
     }
 
     @AfterMethod
-    public void tearDownMethod(ITestResult result) {
-        logger.info("Tearing down test method");
+    public void tearDown(Method method, ITestResult result) {
+        logger.info("Tearing down test method: {} in thread: {}", method.getName(), Thread.currentThread().getName());
         
         // Take screenshot on failure
         if (result.getStatus() == ITestResult.FAILURE) {
-            String screenshotPath = ScreenshotUtil.takeScreenshot(page, result.getMethod().getMethodName());
+            String screenshotPath = ScreenshotUtil.takeScreenshot(PlaywrightManager.getPage(), method.getName());
             logger.error("Test failed. Screenshot saved: {}", screenshotPath);
+            ExtentReportManager.addScreenshot(screenshotPath);
         }
         
-        // Close in safe order: page -> context -> browser -> playwright
-        try { if (page != null) page.close(); } catch (Exception ignored) { logger.debug("Error closing page", ignored); }
-        try { if (context != null) context.close(); } catch (Exception ignored) { logger.debug("Error closing context", ignored); }
-        try { if (browser != null) browser.close(); } catch (Exception ignored) { logger.debug("Error closing browser", ignored); }
-        try { if (playwright != null) playwright.close(); } catch (Exception ignored) { logger.debug("Error closing playwright", ignored); }
-
-        page = null; context = null; browser = null; playwright = null;
-        logger.info("Test method teardown completed");
+        ExtentReportManager.getTest().info("Finished test: " + method.getName());
+        PlaywrightManager.tearDown();
+        ExtentReportManager.cleanup();
+        ExtentReportManager.flush();
     }
 
     protected void navigateToUrl(String url) {
         logger.info("Navigating to URL: {}", url);
-        page.navigate(url);
-        page.waitForLoadState();
+        PlaywrightManager.getPage().navigate(url);
+        PlaywrightManager.getPage().waitForLoadState();
     }
 
     protected void navigateToApp() {
-        String appUrl = ConfigManager.getProperty("app.url");
+        String appUrl = com.testautomation.config.ConfigManager.getProperty("app.url");
         navigateToUrl(appUrl);
     }
 }

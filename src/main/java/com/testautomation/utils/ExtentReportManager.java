@@ -13,7 +13,7 @@ import java.io.File;
 public class ExtentReportManager {
     private static final Logger logger = LogManager.getLogger(ExtentReportManager.class);
     private static ExtentReports extent;
-    private static ExtentTest test;
+    private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
     public static ExtentReports getInstance() {
         if (extent == null) {
@@ -52,23 +52,23 @@ public class ExtentReportManager {
         }
     }
 
-    public static ExtentTest createTest(String testName) {
-        test = getInstance().createTest(testName);
-        logger.info("Created test: {}", testName);
-        return test;
+    public static synchronized void createTest(String testName) {
+        ExtentTest extentTest = getInstance().createTest(testName);
+        test.set(extentTest);
+        logger.info("Created thread-safe test: {}", testName);
     }
 
-    public static ExtentTest createTest(String testName, String description) {
-        test = getInstance().createTest(testName, description);
-        logger.info("Created test: {} - {}", testName, description);
-        return test;
+    public static synchronized void createTest(String testName, String description) {
+        ExtentTest extentTest = getInstance().createTest(testName, description);
+        test.set(extentTest);
+        logger.info("Created thread-safe test: {} - {}", testName, description);
     }
 
     public static ExtentTest getTest() {
-        return test;
+        return test.get();
     }
 
-    public static void flush() {
+    public static synchronized void flush() {
         if (extent != null) {
             extent.flush();
             logger.info("ExtentReport flushed successfully");
@@ -76,37 +76,47 @@ public class ExtentReportManager {
     }
 
     public static void addScreenshot(String screenshotPath) {
-        if (test != null && screenshotPath != null) {
-            test.addScreenCaptureFromPath(screenshotPath);
+        ExtentTest currentTest = test.get();
+        if (currentTest != null && screenshotPath != null) {
+            currentTest.addScreenCaptureFromPath(screenshotPath);
             logger.info("Screenshot added to report: {}", screenshotPath);
         }
     }
 
     public static void logInfo(String message) {
-        if (test != null) {
-            test.info(message);
+        ExtentTest currentTest = test.get();
+        if (currentTest != null) {
+            currentTest.info(message);
             logger.info("ExtentReport - INFO: {}", message);
         }
     }
 
     public static void logPass(String message) {
-        if (test != null) {
-            test.pass(message);
+        ExtentTest currentTest = test.get();
+        if (currentTest != null) {
+            currentTest.pass(message);
             logger.info("ExtentReport - PASS: {}", message);
         }
     }
 
     public static void logFail(String message) {
-        if (test != null) {
-            test.fail(message);
+        ExtentTest currentTest = test.get();
+        if (currentTest != null) {
+            currentTest.fail(message);
             logger.error("ExtentReport - FAIL: {}", message);
         }
     }
 
     public static void logSkip(String message) {
-        if (test != null) {
-            test.skip(message);
+        ExtentTest currentTest = test.get();
+        if (currentTest != null) {
+            currentTest.skip(message);
             logger.warn("ExtentReport - SKIP: {}", message);
         }
+    }
+    
+    // Clean up thread-local data
+    public static void cleanup() {
+        test.remove();
     }
 }

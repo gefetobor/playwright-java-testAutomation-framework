@@ -23,8 +23,8 @@ public class DashboardPage extends BasePage {
     private static final String SEARCH_BOX = "#dashboard-page #search";
     private static final String SEARCH_BUTTON = "#dashboard-page .search-form button[type='submit']";
 
-    public DashboardPage(Page page) {
-        super(page);
+    public DashboardPage() {
+        // No constructor needed - using PlaywrightManager
     }
 
     public boolean isPageLoaded() {
@@ -75,7 +75,7 @@ public class DashboardPage extends BasePage {
         
         takeScreenshot("after_logout_click");
         ExtentReportManager.logInfo("Logout button clicked successfully");
-        return new LandingPage(page);
+        return new LandingPage();
     }
 
     public void clickProfileButton() {

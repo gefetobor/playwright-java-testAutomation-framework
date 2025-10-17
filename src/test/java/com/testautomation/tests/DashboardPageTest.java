@@ -31,7 +31,7 @@ public class DashboardPageTest extends BaseTest {
             navigateToApp();
             
             // Navigate to dashboard through login
-            LandingPage landingPage = new LandingPage(page);
+            LandingPage landingPage = new LandingPage();
             landingPage.waitForPageToLoad();
             LoginPage loginPage = landingPage.clickLoginButton();
             loginPage.waitForPageToLoad();
@@ -54,7 +54,7 @@ public class DashboardPageTest extends BaseTest {
             // Perform setup within test method to enable retry
             if (dashboardPage == null) {
                 navigateToApp();
-                LandingPage landingPage = new LandingPage(page);
+                LandingPage landingPage = new LandingPage();
                 landingPage.waitForPageToLoad();
                 LoginPage loginPage = landingPage.clickLoginButton();
 

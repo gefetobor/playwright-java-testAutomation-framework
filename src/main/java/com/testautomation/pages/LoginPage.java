@@ -1,6 +1,5 @@
 package com.testautomation.pages;
 
-import com.microsoft.playwright.Page;
 import com.testautomation.utils.ExtentReportManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,8 +18,8 @@ public class LoginPage extends BasePage {
     private static final String PAGE_TITLE = "h1, h2, .page-title, .login-title";
     private static final String BACK_TO_HOME_LINK = "a[onclick='showLanding()']";
 
-    public LoginPage(Page page) {
-        super(page);
+    public LoginPage() {
+        // No constructor needed - using PlaywrightManager
     }
 
     public boolean isPageLoaded() {
@@ -65,7 +64,7 @@ public class LoginPage extends BasePage {
         
         takeScreenshot("after_login_submit");
         ExtentReportManager.logInfo("Login button clicked successfully");
-        return new DashboardPage(page);
+        return new DashboardPage();
     }
 
     public void clickLoginButtonExpectingError() {
@@ -96,7 +95,7 @@ public class LoginPage extends BasePage {
         logger.info("Checking if error message is visible");
         try {
             // Check if the error element is visible and has content
-            Object result = page.evaluate("() => { const el = document.querySelector('#login-error'); return el && el.style.display !== 'none' && el.textContent.trim() !== ''; }");
+            Object result = getPage().evaluate("() => { const el = document.querySelector('#login-error'); return el && el.style.display !== 'none' && el.textContent.trim() !== ''; }");
             boolean isVisible = result instanceof Boolean ? (Boolean) result : false;
             ExtentReportManager.logInfo("Error message visible: " + isVisible);
             return isVisible;
@@ -164,22 +163,22 @@ public class LoginPage extends BasePage {
         
         takeScreenshot("after_back_to_home");
         ExtentReportManager.logInfo("Back to home link clicked");
-        return new LandingPage(page);
+        return new LandingPage();
     }
 
     public void clearEmailField() {
         logger.info("Clearing email field");
         click(EMAIL_FIELD);
-        page.keyboard().press("Control+a");
-        page.keyboard().press("Delete");
+        getPage().keyboard().press("Control+a");
+        getPage().keyboard().press("Delete");
         ExtentReportManager.logInfo("Email field cleared");
     }
 
     public void clearPasswordField() {
         logger.info("Clearing password field");
         click(PASSWORD_FIELD);
-        page.keyboard().press("Control+a");
-        page.keyboard().press("Delete");
+        getPage().keyboard().press("Control+a");
+        getPage().keyboard().press("Delete");
         ExtentReportManager.logInfo("Password field cleared");
     }
 
