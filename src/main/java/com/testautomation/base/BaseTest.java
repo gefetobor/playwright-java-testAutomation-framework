@@ -6,37 +6,46 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 import java.lang.reflect.Method;
 
 public class BaseTest {
     protected static final Logger logger = LogManager.getLogger(BaseTest.class);
 
+    @BeforeSuite
+    public void setUpSuite() {
+        logger.info("Setting up test suite");
+        PlaywrightManager.setUp();
+    }
+
     @BeforeMethod
     public void setUp(Method method) {
         logger.info("Setting up test method: {} in thread: {}", method.getName(), Thread.currentThread().getName());
         
-        PlaywrightManager.setUp();
+        // Ensure Playwright is set up for this thread if not already done
+        if (PlaywrightManager.getPage() == null) {
+            logger.info("Playwright not initialized for thread {}, setting up now", Thread.currentThread().getName());
+            PlaywrightManager.setUp();
+        }
+        
         ExtentReportManager.createTest(method.getName());
-        ExtentReportManager.getTest().info("Starting test: " + method.getName());
     }
 
     @AfterMethod
     public void tearDown(Method method, ITestResult result) {
         logger.info("Tearing down test method: {} in thread: {}", method.getName(), Thread.currentThread().getName());
         
-        // Take screenshot on failure
-        if (result.getStatus() == ITestResult.FAILURE) {
-            String screenshotPath = ScreenshotUtil.takeScreenshot(PlaywrightManager.getPage(), method.getName());
-            logger.error("Test failed. Screenshot saved: {}", screenshotPath);
-            ExtentReportManager.addScreenshot(screenshotPath);
-        }
-        
-        ExtentReportManager.getTest().info("Finished test: " + method.getName());
-        PlaywrightManager.tearDown();
         ExtentReportManager.cleanup();
         ExtentReportManager.flush();
+    }
+
+    @AfterSuite
+    public void tearDownSuite() {
+        logger.info("Tearing down test suite");
+        PlaywrightManager.tearDown();
     }
 
     protected void navigateToUrl(String url) {

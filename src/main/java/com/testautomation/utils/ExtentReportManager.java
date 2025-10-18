@@ -78,8 +78,22 @@ public class ExtentReportManager {
     public static void addScreenshot(String screenshotPath) {
         ExtentTest currentTest = test.get();
         if (currentTest != null && screenshotPath != null) {
-            currentTest.addScreenCaptureFromPath(screenshotPath);
-            logger.info("Screenshot added to report: {}", screenshotPath);
+            try {
+                // Read the screenshot file and convert to base64
+                java.nio.file.Path path = java.nio.file.Paths.get(screenshotPath);
+                byte[] imageBytes = java.nio.file.Files.readAllBytes(path);
+                String base64Image = java.util.Base64.getEncoder().encodeToString(imageBytes);
+                
+                // Add as base64 image (this creates clickable thumbnails)
+                currentTest.addScreenCaptureFromBase64String(base64Image);
+                logger.info("Screenshot added to report as base64: {}", screenshotPath);
+            } catch (Exception e) {
+                logger.error("Failed to add screenshot as base64: {}", e.getMessage());
+                // Fallback to relative path
+                String relativePath = screenshotPath.replace("\\", "/");
+                currentTest.addScreenCaptureFromPath(relativePath);
+                logger.info("Screenshot added to report as relative path: {}", relativePath);
+            }
         }
     }
 

@@ -103,7 +103,6 @@ public class LandingPage extends BasePage {
 
     public String getCurrentUrl() {
         String url = super.getCurrentUrl();
-        ExtentReportManager.logInfo("Current URL: " + url);
         return url;
     }
 

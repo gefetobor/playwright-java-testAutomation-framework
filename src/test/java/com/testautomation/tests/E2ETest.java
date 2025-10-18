@@ -11,8 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+@Listeners(com.testautomation.listeners.TestListener.class)
 public class E2ETest extends BaseTest {
     private static final Logger logger = LogManager.getLogger(E2ETest.class);
     private String validEmail;
@@ -35,7 +37,6 @@ public class E2ETest extends BaseTest {
     @Test(description = "Complete user journey: Landing -> Login -> Dashboard -> Logout", retryAnalyzer = RetryAnalyzer.class)
     public void testCompleteUserJourney() {
         logger.info("Testing complete user journey");
-        ExtentReportManager.logInfo("Starting test: Complete user journey");
         
         try {
             // Step 1: Verify landing page loads
@@ -76,7 +77,6 @@ public class E2ETest extends BaseTest {
     @Test(description = "Test invalid login flow", retryAnalyzer = RetryAnalyzer.class)
     public void testInvalidLoginFlow() {
         logger.info("Testing invalid login flow");
-        ExtentReportManager.logInfo("Starting test: Invalid login flow");
         
         try {
             // Step 1: Navigate to login page
@@ -114,7 +114,6 @@ public class E2ETest extends BaseTest {
     @Test(description = "Test navigation between pages", retryAnalyzer = RetryAnalyzer.class)
     public void testNavigationBetweenPages() {
         logger.info("Testing navigation between pages");
-        ExtentReportManager.logInfo("Starting test: Navigation between pages");
         
         try {
             // Step 1: Start at landing page
@@ -154,7 +153,6 @@ public class E2ETest extends BaseTest {
     @Test(description = "Test dashboard functionality after login", retryAnalyzer = RetryAnalyzer.class)
     public void testDashboardFunctionalityAfterLogin() {
         logger.info("Testing dashboard functionality after login");
-        ExtentReportManager.logInfo("Starting test: Dashboard functionality after login");
         
         try {
             // Step 1: Login to dashboard
@@ -199,7 +197,6 @@ public class E2ETest extends BaseTest {
     @Test(description = "Test multiple login attempts", retryAnalyzer = RetryAnalyzer.class)
     public void testMultipleLoginAttempts() {
         logger.info("Testing multiple login attempts");
-        ExtentReportManager.logInfo("Starting test: Multiple login attempts");
         
         try {
             // Step 1: Navigate to login page

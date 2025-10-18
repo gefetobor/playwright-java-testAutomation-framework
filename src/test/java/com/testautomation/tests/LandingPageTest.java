@@ -8,8 +8,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+@Listeners(com.testautomation.listeners.TestListener.class)
 public class LandingPageTest extends BaseTest {
     private static final Logger logger = LogManager.getLogger(LandingPageTest.class);
     private LandingPage landingPage;
@@ -25,7 +27,6 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify landing page loads successfully", retryAnalyzer = RetryAnalyzer.class)
     public void testLandingPageLoads() {
         logger.info("Testing landing page loads successfully");
-        ExtentReportManager.logInfo("Starting test: Landing page loads successfully");
         
         try {
             Assert.assertTrue(landingPage.isPageLoaded(), "Landing page should be loaded");
@@ -39,7 +40,6 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify landing page title is displayed", retryAnalyzer = RetryAnalyzer.class)
     public void testLandingPageTitle() {
         logger.info("Testing landing page title display");
-        ExtentReportManager.logInfo("Starting test: Landing page title display");
         
         try {
             String title = landingPage.getPageTitle();
@@ -55,7 +55,6 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify login button is visible and clickable", retryAnalyzer = RetryAnalyzer.class)
     public void testLoginButtonVisibility() {
         logger.info("Testing login button visibility");
-        ExtentReportManager.logInfo("Starting test: Login button visibility");
         
         try {
             Assert.assertTrue(landingPage.isLoginButtonVisible(), "Login button should be visible");
@@ -69,7 +68,6 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify signup button is visible", retryAnalyzer = RetryAnalyzer.class)
     public void testSignupButtonVisibility() {
         logger.info("Testing signup button visibility");
-        ExtentReportManager.logInfo("Starting test: Signup button visibility");
         
         try {
             Assert.assertTrue(landingPage.isSignupButtonVisible(), "Signup button should be visible");
@@ -83,7 +81,6 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify navigation menu is visible", retryAnalyzer = RetryAnalyzer.class)
     public void testNavigationMenuVisibility() {
         logger.info("Testing navigation menu visibility");
-        ExtentReportManager.logInfo("Starting test: Navigation menu visibility");
         
         try {
             Assert.assertTrue(landingPage.isNavigationMenuVisible(), "Navigation menu should be visible");
@@ -97,7 +94,6 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify footer is visible", retryAnalyzer = RetryAnalyzer.class)
     public void testFooterVisibility() {
         logger.info("Testing footer visibility");
-        ExtentReportManager.logInfo("Starting test: Footer visibility");
         
         try {
             Assert.assertTrue(landingPage.isFooterVisible(), "Footer should be visible");
@@ -111,7 +107,6 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify page scrolling functionality", retryAnalyzer = RetryAnalyzer.class)
     public void testPageScrolling() {
         logger.info("Testing page scrolling functionality");
-        ExtentReportManager.logInfo("Starting test: Page scrolling functionality");
         
         try {
             // Test scrolling to footer
@@ -130,13 +125,12 @@ public class LandingPageTest extends BaseTest {
     @Test(description = "Verify current URL is correct", retryAnalyzer = RetryAnalyzer.class)
     public void testCurrentUrl() {
         logger.info("Testing current URL");
-        ExtentReportManager.logInfo("Starting test: Current URL verification");
         
         try {
             String currentUrl = landingPage.getCurrentUrl();
             Assert.assertNotNull(currentUrl, "Current URL should not be null");
             Assert.assertFalse(currentUrl.isEmpty(), "Current URL should not be empty");
-            ExtentReportManager.logPass("Current URL is valid: " + currentUrl);
+            ExtentReportManager.logPass("Current URL verification passed");
         } catch (AssertionError e) {
             ExtentReportManager.logFail("Current URL test failed: " + e.getMessage());
             throw e;
