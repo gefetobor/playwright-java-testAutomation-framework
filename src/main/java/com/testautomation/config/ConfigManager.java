@@ -32,10 +32,20 @@ public class ConfigManager {
     }
 
     public static String getProperty(String key) {
+        // Check system property first (Maven -D parameters), then config file
+        String systemProperty = System.getProperty(key);
+        if (systemProperty != null) {
+            return systemProperty;
+        }
         return properties.getProperty(key);
     }
 
     public static String getProperty(String key, String defaultValue) {
+        // Check system property first (Maven -D parameters), then config file
+        String systemProperty = System.getProperty(key);
+        if (systemProperty != null) {
+            return systemProperty;
+        }
         return properties.getProperty(key, defaultValue);
     }
 

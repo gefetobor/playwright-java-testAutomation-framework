@@ -106,6 +106,18 @@ mvn test -Dbrowser.headless=true
 ```bash
 mvn test -DsuiteXmlFile=testng.xml
 ```
+### Run smoke only
+```bash
+mvn test -Dgroups=smoke
+```
+# Run regression only
+```bash
+mvn test -Dgroups=regression
+```
+# Run everything in testng.xml
+```bash
+mvn test -Dsurefire.suiteXmlFiles=testng.xml
+```
 
 ## Test Classes
 
