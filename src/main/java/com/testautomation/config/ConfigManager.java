@@ -62,6 +62,19 @@ public class ConfigManager {
         }
     }
 
+    public static double getDoubleProperty(String key, double defaultValue) {
+        String value = getProperty(key);
+        if (value == null) {
+            return defaultValue;
+        }
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            logger.warn("Invalid double value for key: {}, using default: {}", key, defaultValue);
+            return defaultValue;
+        }
+    }
+
     public static boolean getBooleanProperty(String key) {
         return Boolean.parseBoolean(getProperty(key));
     }

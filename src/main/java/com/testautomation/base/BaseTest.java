@@ -1,7 +1,6 @@
 package com.testautomation.base;
 
 import com.testautomation.utils.ExtentReportManager;
-import com.testautomation.utils.ScreenshotUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;

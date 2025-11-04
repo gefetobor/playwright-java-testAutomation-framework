@@ -4,6 +4,7 @@ import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import com.microsoft.playwright.options.LoadState;
 import com.testautomation.base.PlaywrightManager;
+import com.testautomation.config.ConfigManager;
 import com.testautomation.utils.ScreenshotUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -140,10 +141,36 @@ public abstract class BasePage {
         return title;
     }
 
-    protected void takeScreenshot(String stepName) {
+    protected String takeScreenshot(String stepName) {
         String screenshotPath = ScreenshotUtil.takeScreenshot(getPage(), this.getClass().getSimpleName(), stepName);
         if (screenshotPath != null) {
             logger.info("Screenshot taken for step: {}", stepName);
+        }
+        return screenshotPath;
+    }
+
+    protected String takeScreenshotAndCompareWithBaseline(String stepName) {
+        waitForScreenshotStabilization();
+        String screenshotPath = takeScreenshot(stepName);
+        if (screenshotPath != null) {
+            double allowedDiff = ConfigManager.getDoubleProperty("screenshot.diff.max.percentage", 0.0);
+            String baselineKey = String.format("%s/%s", this.getClass().getSimpleName(), stepName);
+            ScreenshotUtil.assertScreenshotMatchesBaseline(screenshotPath, baselineKey, allowedDiff);
+        }
+        return screenshotPath;
+    }
+
+    private void waitForScreenshotStabilization() {
+        int delayMs = ConfigManager.getIntProperty("screenshot.capture.delay.ms", 0);
+        if (delayMs <= 0) {
+            return;
+        }
+        try {
+            logger.debug("Waiting {} ms before taking screenshot to stabilize UI", delayMs);
+            Thread.sleep(delayMs);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.warn("Screenshot stabilization wait interrupted", e);
         }
     }
 

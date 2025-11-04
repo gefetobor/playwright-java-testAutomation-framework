@@ -113,7 +113,13 @@ public class LandingPage extends BasePage {
         waitForElementToBeVisible(PAGE_TITLE);
         waitForElementToBeVisible(LOGIN_BUTTON);
         waitForElementToBeVisible(SIGNUP_BUTTON);
-        takeScreenshot("landing_page_loaded");
+        //takeScreenshot("landing_page_loaded");
+        captureScreenshotAndCompareWithBaseline("landing_page");
         ExtentReportManager.logInfo("Landing page loaded completely");
+    }
+
+    private void captureScreenshotAndCompareWithBaseline(String stepName) {
+        String path = takeScreenshotAndCompareWithBaseline(stepName);
+        ExtentReportManager.addScreenshot(path);
     }
 }

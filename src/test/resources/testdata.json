@@ -7,8 +7,8 @@
       "lastName": "User"
     },
     {
-      "email": "admin@example.com",
-      "password": "admin123",
+      "email": "invalid@example.com",
+      "password": "wrongpassword",
       "firstName": "Admin",
       "lastName": "User"
     }

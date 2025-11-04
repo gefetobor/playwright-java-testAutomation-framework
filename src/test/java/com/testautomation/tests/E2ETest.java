@@ -1,18 +1,19 @@
 package com.testautomation.tests;
 
 import com.testautomation.base.BaseTest;
-import com.testautomation.config.ConfigManager;
 import com.testautomation.pages.DashboardPage;
 import com.testautomation.pages.LandingPage;
 import com.testautomation.pages.LoginPage;
 import com.testautomation.utils.ExtentReportManager;
 import com.testautomation.utils.RetryAnalyzer;
+import com.testautomation.utils.TestDataManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import java.util.Map;
 
 @Listeners(com.testautomation.listeners.TestListener.class)
 public class E2ETest extends BaseTest {
@@ -28,10 +29,13 @@ public class E2ETest extends BaseTest {
         navigateToApp();
         
         // Load test data
-        validEmail = ConfigManager.getProperty("test.user.email");
-        validPassword = ConfigManager.getProperty("test.user.password");
-        invalidEmail = ConfigManager.getProperty("test.user.invalid.email");
-        invalidPassword = ConfigManager.getProperty("test.user.invalid.password");
+        Map<String, String> validUser = TestDataManager.getTestUsers().get(0);
+        validEmail = validUser.get("email");
+        validPassword = validUser.get("password");
+
+        Map<String, String> invalidUser = TestDataManager.getTestUsers().get(1);
+        invalidEmail = invalidUser.get("email");
+        invalidPassword = invalidUser.get("password");
     }
 
     @Test(description = "Complete user journey: Landing -> Login -> Dashboard -> Logout", retryAnalyzer = RetryAnalyzer.class)
